@@ -144,7 +144,10 @@
       <router-view />
     </q-page-container>
 
-    <q-dialog v-model="showDialog">
+    <q-dialog
+      v-model="showDialog"
+      @before-hide="cleanFee"
+    >
       <q-card v-if="showData">
         <q-card-section>
           <div class="text-h6">{{showData.type == 'entering' ? '入库' : '出库'}}成功</div>
@@ -156,8 +159,8 @@
         <q-card-section>
           停车场id: {{showData.parking_lot_hash}}
         </q-card-section>
-        <q-card-section>
-          费用: {{123}}
+        <q-card-section v-if="parkFee">
+          费用: {{parkFee}}
         </q-card-section>
 
         <q-card-actions align="right">
@@ -224,8 +227,12 @@ export default {
       'getUserParkInfo'
     ]),
     ...mapMutations('parking', [
-      'setIsLocate'
+      'setIsLocate',
+      'setParkFee'
     ]),
+    cleanFee () {
+      this.setParkFee({ fee: 0 })
+    },
     search (park) {
       this.leftDrawerOpen = false
       if (this.$route.path !== '/') {
@@ -269,6 +276,10 @@ export default {
       'markArr',
       'dialogType',
       'isLocate'
+
+    ]),
+    ...mapState('parking', [
+      'parkFee'
     ])
 
   },

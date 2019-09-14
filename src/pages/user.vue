@@ -33,7 +33,7 @@
           </q-item-label>
         </q-item-section>
         <q-item-section side>
-          费用 {{parkInfo.calcFee}}
+          费用 {{parkInfo.calcFee}} P
         </q-item-section>
         <q-item-section side>
           <q-btn
@@ -95,9 +95,10 @@ export default {
         }
         // this.$root.$emit('showDialog', events, status)
         events.forEach(({ phase, event: { data, method, section } }) => {
-          console.log(phase.toString() + ' : ' + section + '.' + method + ' ' + data.toString(), '-------------')
           if (!data.isEmpty) {
+            console.log(phase.toString() + ' : ' + section + '.' + method + ' ' + data.toString(), '-------------')
             let result = JSON.parse(data)
+            console.log(result, '==========')
             let res = result.filter(r => {
               return r.user_id
             })

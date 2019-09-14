@@ -44,7 +44,8 @@ export default {
     parks: [],
     markArr: [],
     loaded: false,
-    isLocate: false // 导航状态
+    isLocate: false, // 导航状态
+    parkFee: 0
   }),
   actions: {
     setConnect: ({ commit }, { payload }) => {
@@ -164,6 +165,10 @@ export default {
     },
     setIsLocate: (state, { flag }) => {
       state.isLocate = flag
+      return state
+    },
+    setParkFee: (state, { fee }) => {
+      state.parkFee = fee
       return state
     }
   }
