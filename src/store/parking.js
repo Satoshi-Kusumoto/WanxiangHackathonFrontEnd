@@ -13,7 +13,7 @@ export const parseParkLot = (p, idx) => {
   longNum = longNum.join('')
   // console.log(latNum, longNum)
   data.id = p.id
-  data.name = parksName[idx] || '停车场 X'
+  data.name = parksName[idx] || '停车场信息'
   data.position = [longNum, latNum]
   data.remain = Number(rawData.remain.toString())
   data.capacity = Number(rawData.capacity.toString())

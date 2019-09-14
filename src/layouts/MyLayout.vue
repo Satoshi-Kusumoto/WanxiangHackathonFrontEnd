@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh lpr lFf">
     <q-header elevated>
-      <q-toolbar>
+      <q-toolbar class="bg-white">
         <q-btn
           flat
           dense
@@ -9,7 +9,8 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
           aria-label="Menu"
         >
-          <q-icon name="menu" />
+          <!-- <q-icon name="menu" /> -->
+          <q-icon name="img:statics/menu.png" />
         </q-btn>
 
         <q-toolbar-title>
@@ -30,18 +31,22 @@
     <q-footer elevated>
       <q-tabs
         v-model="selectedTab"
+        indicator-color="black"
         :current="selectedTab"
+        class="bg-white"
       >
         <q-route-tab
-          icon="map"
           to="/"
           exact
-        />
+        >
+          <q-icon name="img:statics/map.png" />
+        </q-route-tab>
         <q-route-tab
-          icon="perm_identity"
           to="/user"
           exact
-        />
+        >
+          <q-icon name="img:statics/user.png" />
+        </q-route-tab>
       </q-tabs>
     </q-footer>
     <q-drawer
@@ -154,13 +159,13 @@
         </q-card-section>
 
         <q-card-section>
-          用户：{{showData.user_id}}
+          用户：{{showData.user_id | split}}
         </q-card-section>
         <q-card-section>
-          停车场id: {{showData.parking_lot_hash}}
+          停车场id: {{showData.parking_lot_hash | split}}
         </q-card-section>
         <q-card-section v-if="parkFee">
-          费用: {{parkFee}}
+          费用: {{parkFee}} P
         </q-card-section>
 
         <q-card-actions align="right">
@@ -288,8 +293,14 @@ export default {
       if (val) {
         return new Decimal(val).times(3600).toString()
       }
+    },
+    split (val) {
+      const head = val.substr(0, 5)
+      const tail = val.substr(-5)
+      return `${head}...${tail}`
     }
   }
+
 }
 </script>
 

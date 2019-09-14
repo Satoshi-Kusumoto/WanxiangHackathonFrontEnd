@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import { Notify } from 'quasar'
+import { Notify, LocalStorage } from 'quasar'
+
 const { ApiPromise, WsProvider } = require('@polkadot/api')
 const types = {
   ParkingLot: {
@@ -76,8 +77,9 @@ export default {
   },
   mounted () {
     this.name = this.account
-    if (this.serverHost) {
-      this.server = this.serverHost
+    const serverHost = LocalStorage.getItem('serverHost')
+    if (serverHost || this.serverHost) {
+      this.server = serverHost || this.serverHost
     }
   },
   methods: {
@@ -92,8 +94,10 @@ export default {
       'getParks'
     ]),
     async setServer () {
+      // TODO localstorage
       try {
         const url = this.server
+        LocalStorage.set('serverHost', url)
         const provider = new WsProvider(url)
         const api = await ApiPromise.create({ provider, types })
         window.$api = api

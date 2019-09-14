@@ -33,7 +33,7 @@
           </q-item-label>
         </q-item-section>
         <q-item-section side>
-          费用 {{parkInfo.calcFee}} P
+          费用 ≈ {{parkInfo.calcFee}} P
         </q-item-section>
         <q-item-section side>
           <q-btn
@@ -58,8 +58,8 @@
 <script>
 import {
   mapState,
-  mapActions
-  // mapMutations
+  mapActions,
+  mapMutations
 } from 'vuex'
 import Keyring from '@polkadot/keyring'
 import _ from 'lodash'
@@ -80,6 +80,9 @@ export default {
       'getUserParkInfo',
       'getBalance'
     ]),
+    ...mapMutations('parking', [
+      'setParkFee'
+    ]),
     leaving () {
       this.loading = true
       const keyring = new Keyring({ type: 'sr25519' })
@@ -98,7 +101,10 @@ export default {
           if (!data.isEmpty) {
             console.log(phase.toString() + ' : ' + section + '.' + method + ' ' + data.toString(), '-------------')
             let result = JSON.parse(data)
-            console.log(result, '==========')
+            if (method === 'Transfer' && result[0] === this.address) {
+              console.log('setparkfee', result[2])
+              this.setParkFee({ fee: result[2] })
+            }
             let res = result.filter(r => {
               return r.user_id
             })
