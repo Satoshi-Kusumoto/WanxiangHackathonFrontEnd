@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
+  <q-layout view="lHh lpr lFf">
     <q-header elevated>
       <q-toolbar>
         <q-btn
@@ -13,13 +13,37 @@
         </q-btn>
 
         <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        </q-toolbar-title>
+        <q-btn
+          flat
+          dense
+          round
+          @click="$router.push('/setting')"
+          aria-label="Menu"
+        >
+          <q-icon name="setting" />
+        </q-btn>
+
       </q-toolbar>
     </q-header>
-
+    <q-footer elevated>
+      <q-tabs
+        v-model="selectedTab"
+        :current="selectedTab"
+      >
+        <q-route-tab
+          icon="map"
+          to="/"
+          exact
+        />
+        <q-route-tab
+          icon="perm_identity"
+          to="/user"
+          exact
+        />
+      </q-tabs>
+    </q-footer>
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
@@ -27,84 +51,90 @@
       content-class="bg-grey-2"
     >
       <q-list>
-        <q-item-label header>Essential Links</q-item-label>
-        <q-item clickable tag="a" target="_blank" href="https://quasar.dev">
-          <q-item-section avatar>
-            <q-icon name="school" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Docs</q-item-label>
-            <q-item-label caption>quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
+        <q-item-label header>附近的停车场</q-item-label>
         <q-item
+          v-for="(park, idx) in markArr"
+          :key="idx"
           clickable
-          tag="a"
-          target="_blank"
-          href="https://github.quasar.dev"
         >
-          <q-item-section avatar>
-            <q-icon name="code" />
-          </q-item-section>
+          <!--
           <q-item-section>
-            <q-item-label>Github</q-item-label>
-            <q-item-label caption>github.com/quasarframework</q-item-label>
+            <q-item-label>{{ park.name }}</q-item-label>
+            <q-item-label
+              caption
+              lines="1"
+            >{{ park.price }} / 小时</q-item-label>
           </q-item-section>
-        </q-item>
-        <q-item
-          clickable
-          tag="a"
-          target="_blank"
-          href="https://chat.quasar.dev"
-        >
-          <q-item-section avatar>
-            <q-icon name="chat" />
+
+          <q-item-section side>
+            <q-item-label caption>{{park.dis}} m</q-item-label>
           </q-item-section>
-          <q-item-section>
-            <q-item-label>Discord Chat Channel</q-item-label>
-            <q-item-label caption>chat.quasar.dev</q-item-label>
+          <q-item-section top side>
+            <div class="text-grey-8 q-gutter-xs">
+              <q-btn
+                class="gt-xs"
+                size="12px"
+                flat
+                dense
+                round
+                icon="map"
+                 @click="()=>locate(park)"
+              />
+              <q-btn
+                class="gt-xs"
+                size="12px"
+                flat
+                dense
+                round
+                icon="done"
+              />
+            </div>
+          </q-item-section> -->
+
+          <!-- <q-item-section top class="col-2">
+          <q-item-label class="q-mt-sm">{{ park.price }} / 小时</q-item-label>
+        </q-item-section> -->
+
+          <q-item-section
+            top
+            @click="()=>locate(park)"
+          >
+            <q-item-label lines="1">
+              <span class="text-weight-medium">{{ park.name }}</span>
+            </q-item-label>
+            <q-item-label
+              caption
+              lines="1"
+            >
+              {{park.dis}} m
+            </q-item-label>
+            <q-item-label lines="1">
+              {{park.current_price | hour}} / 小时
+            </q-item-label>
           </q-item-section>
-        </q-item>
-        <q-item
-          clickable
-          tag="a"
-          target="_blank"
-          href="https://forum.quasar.dev"
-        >
-          <q-item-section avatar>
-            <q-icon name="record_voice_over" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Forum</q-item-label>
-            <q-item-label caption>forum.quasar.dev</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item
-          clickable
-          tag="a"
-          target="_blank"
-          href="https://twitter.quasar.dev"
-        >
-          <q-item-section avatar>
-            <q-icon name="rss_feed" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Twitter</q-item-label>
-            <q-item-label caption>@quasarframework</q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-item
-          clickable
-          tag="a"
-          target="_blank"
-          href="https://facebook.quasar.dev"
-        >
-          <q-item-section avatar>
-            <q-icon name="public" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label>Facebook</q-item-label>
-            <q-item-label caption>@QuasarFramework</q-item-label>
+
+          <q-item-section
+            top
+            side
+          >
+            <div class="text-grey-8 q-gutter-xs">
+              <q-btn
+                size="12px"
+                flat
+                dense
+                round
+                icon="near_me"
+                @click="()=>search(park)"
+              />
+              <q-btn
+                size="12px"
+                flat
+                dense
+                round
+                icon="line_style"
+                @click="()=>view(park, idx)"
+              />
+            </div>
           </q-item-section>
         </q-item>
       </q-list>
@@ -113,23 +143,122 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-dialog v-model="showDialog">
+      <q-card v-if="showData">
+        <q-card-section>
+          <div class="text-h6">{{showData.type == 'entering' ? '入库' : '出库'}}成功</div>
+        </q-card-section>
+
+        <q-card-section>
+          用户：{{showData.user_id}}
+        </q-card-section>
+        <q-card-section>
+          停车场id: {{showData.parking_lot_hash}}
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="关闭"
+            color="primary"
+            v-close-popup
+          />
+          <q-btn
+            v-if="showData.type == 'entering'"
+            flat
+            label="查看"
+            color="primary"
+            @click="viewDetail"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
   </q-layout>
 </template>
 
 <script>
-import { openURL } from "quasar";
+import { mapState, mapActions } from 'vuex'
+import _ from 'lodash'
+import Decimal from 'decimal.js'
 
 export default {
-  name: "MyLayout",
-  data() {
+  name: 'MyLayout',
+  data () {
     return {
-      leftDrawerOpen: false
-    };
+      leftDrawerOpen: false,
+      selectedTab: 'map',
+      showDialog: false,
+      showData: null
+    }
+  },
+  mounted () {
+    // 获取停车场
+    this.getParks()
+    this.getUserParkInfo()
+    this.$root.$on('showDialog', this.dialog)
+  },
+  destroyed () {
+    this.$root.$off('showDialog', this.dialog)
   },
   methods: {
-    openURL
+    ...mapActions('parking', [
+      'getParks'
+    ]),
+    ...mapActions('user', [
+      'getUserParkInfo'
+    ]),
+    search (park) {
+      this.leftDrawerOpen = false
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
+      _.delay(() => { this.$root.$emit('search', park) }, 500)
+    },
+    locate (park) {
+      this.leftDrawerOpen = false
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
+      _.delay(() => { this.$root.$emit('locate', park) }, 500)
+    },
+    view (park, idx) {
+      this.leftDrawerOpen = false
+      if (this.$route.path !== '/') {
+        this.$router.push('/')
+      }
+      _.delay(() => { this.$root.$emit('view', park, idx) }, 1000)
+    },
+    dialog (data, type) {
+      this.showDialog = true
+      data.type = type
+      this.showData = data
+      console.log(data, 'data ....')
+    },
+    viewDetail () {
+      const data = this.showData
+      if (data.type === 'entering') {
+        this.$router.push('/user')
+      }
+    }
+  },
+  computed: {
+    ...mapState('parking', [
+      'markArr',
+      'dialogType'
+    ])
+
+  },
+  filters: {
+    hour (val) {
+      if (val) {
+        return new Decimal(val).times(3600).toString()
+      }
+    }
   }
-};
+}
 </script>
 
-<style></style>
+<style>
+</style>
