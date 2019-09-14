@@ -5,14 +5,9 @@ module.exports = function (ctx) {
   return {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
-    boot: [
-      'i18n',
-      'axios'
-    ],
+    boot: ['i18n', 'axios', 'map', 'api', 'echarts'],
 
-    css: [
-      'app.styl'
-    ],
+    css: ['app.styl'],
 
     extras: [
       // 'ionicons-v4',
@@ -45,20 +40,29 @@ module.exports = function (ctx) {
         'QList',
         'QItem',
         'QItemSection',
-        'QItemLabel'
+        'QItemLabel',
+        'QTabPanel',
+        'QTabs',
+        'QRouteTab',
+        'QFooter',
+        'QDialog',
+        'QCard',
+        'QCardActions',
+        'QCardSection',
+        'QSpace',
+        'QBtnGroup',
+        'QAvatar',
+        'QInput',
+        'QSelect'
       ],
 
-      directives: [
-        'Ripple'
-      ],
+      directives: ['Ripple', 'ClosePopup'],
 
       // Quasar plugins
-      plugins: [
-        'Notify'
-      ]
+      plugins: ['Notify']
     },
 
-    supportIE: true,
+    supportIE: false,
 
     build: {
       scopeHoisting: true,
@@ -97,8 +101,8 @@ module.exports = function (ctx) {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {}, // only for NON InjectManifest
       manifest: {
-        // name: 'yes',
-        // short_name: 'yes',
+        // name: 'parking',
+        // short_name: 'parking',
         // description: 'A Quasar Framework app',
         display: 'standalone',
         orientation: 'portrait',
@@ -106,36 +110,36 @@ module.exports = function (ctx) {
         theme_color: '#027be3',
         icons: [
           {
-            'src': 'statics/icons/icon-128x128.png',
-            'sizes': '128x128',
-            'type': 'image/png'
+            src: 'statics/icons/icon-128x128.png',
+            sizes: '128x128',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-192x192.png',
-            'sizes': '192x192',
-            'type': 'image/png'
+            src: 'statics/icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-256x256.png',
-            'sizes': '256x256',
-            'type': 'image/png'
+            src: 'statics/icons/icon-256x256.png',
+            sizes: '256x256',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-384x384.png',
-            'sizes': '384x384',
-            'type': 'image/png'
+            src: 'statics/icons/icon-384x384.png',
+            sizes: '384x384',
+            type: 'image/png'
           },
           {
-            'src': 'statics/icons/icon-512x512.png',
-            'sizes': '512x512',
-            'type': 'image/png'
+            src: 'statics/icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png'
           }
         ]
       }
     },
 
     cordova: {
-      // id: 'yes',
+      // id: 'org.wanxiang.parking',
       // noIosLegacyBuildFlag: true, // uncomment only if you know what you are doing
     },
 
@@ -149,20 +153,17 @@ module.exports = function (ctx) {
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
-
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
         // osxSign: '',
         // protocol: 'myapp://path',
-
         // Windows only
         // win32metadata: { ... }
       },
 
       builder: {
         // https://www.electron.build/configuration/configuration
-
         // appId: 'parking'
       }
     }
