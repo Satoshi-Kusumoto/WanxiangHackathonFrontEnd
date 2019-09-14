@@ -53,7 +53,10 @@ module.exports = function (ctx) {
         'QBtnGroup',
         'QAvatar',
         'QInput',
-        'QSelect'
+        'QSelect',
+        'QFab',
+        'QFabAction',
+        'QPageSticky'
       ],
 
       directives: ['Ripple', 'ClosePopup'],

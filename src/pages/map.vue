@@ -27,6 +27,8 @@
           :vid="idx+'marker'"
           :events="park.events"
           :position="park.position"
+          :label="{content: `${park.current_price * 3600}P / 时`, offset: [-20, 35]}"
+
         >
           <!-- <div class="panel">
            <span class="">{{park.price}}/时</span>
@@ -54,7 +56,7 @@
               />
             </div>
             <div class="title">{{ park.name }} </div>
-            <div class="price ">价格 {{park.current_price | hour }} / 时</div>
+            <div class="price ">价格 {{park.current_price | hour }}P / 时</div>
             <div class="distance">距离 {{park.dis}} m</div>
             <div>
               <q-btn-group outline>
@@ -90,7 +92,7 @@
         <q-card-section class="row items-center no-wrap">
           <div>
             <div class="text-weight-bold"> {{currentPark.name}}</div>
-            <div class="text-grey"> {{currentPark.current_price | hour}} / 小时</div>
+            <div class="text-grey"> {{currentPark.current_price | hour}}P / 小时</div>
             <div class="text-grey">剩余车位 {{currentPark.remain }} </div>
           </div>
 
@@ -192,15 +194,20 @@ export default {
     this.$root.$on('view', this.view)
     this.$root.$on('locate', this.locate)
     this.$root.$on('search', this.search)
+    this.$root.$on('clean', this.clean)
   },
   beforeDestroy () {
     this.$root.$off('view', this.view)
     this.$root.$off('locate', this.locate)
     this.$root.$off('search', this.search)
+    this.$root.$off('clean', this.clean)
+
+    this.setIsLocate({ falg: false })
   },
   mounted () {
     this.getParks()
   },
+
   methods: {
     ...mapActions('parking', [
       'getParks'
@@ -208,7 +215,8 @@ export default {
     ...mapMutations('parking', [
       'setMarks',
       'setParks',
-      'setLoaded'
+      'setLoaded',
+      'setIsLocate'
     ]),
 
     viewDetail () {
@@ -249,7 +257,15 @@ export default {
     closeWindow (park) {
       park.visible = false
     },
+    clean () {
+      let oldDriving = this.driving
+      if (oldDriving) {
+        oldDriving.clear()
+      }
+    },
     searchRoute (park) {
+      _.delay(() => this.setIsLocate({ flag: true }), 500)
+
       park.visible = false
       let oldDriving = this.driving
       if (oldDriving) {

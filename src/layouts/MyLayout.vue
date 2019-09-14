@@ -109,7 +109,7 @@
               {{park.dis}} m
             </q-item-label>
             <q-item-label lines="1">
-              {{park.current_price | hour}} / 小时
+              {{park.current_price | hour}}P / 小时
             </q-item-label>
           </q-item-section>
 
@@ -156,6 +156,9 @@
         <q-card-section>
           停车场id: {{showData.parking_lot_hash}}
         </q-card-section>
+        <q-card-section>
+          费用: {{123}}
+        </q-card-section>
 
         <q-card-actions align="right">
           <q-btn
@@ -174,12 +177,23 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
+    <q-page-sticky
+      v-if="isLocate"
+      position="bottom"
+      :offset="[18, 18]"
+    >
+      <q-btn
+        fab
+        icon="close"
+        color="primary"
+        @click="cancelLocate"
+      />
+    </q-page-sticky>
   </q-layout>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import _ from 'lodash'
 import Decimal from 'decimal.js'
 
@@ -208,6 +222,9 @@ export default {
     ]),
     ...mapActions('user', [
       'getUserParkInfo'
+    ]),
+    ...mapMutations('parking', [
+      'setIsLocate'
     ]),
     search (park) {
       this.leftDrawerOpen = false
@@ -241,12 +258,17 @@ export default {
       if (data.type === 'entering') {
         this.$router.push('/user')
       }
+    },
+    cancelLocate () {
+      this.setIsLocate({ flag: false })
+      this.$root.$emit('clean')
     }
   },
   computed: {
     ...mapState('parking', [
       'markArr',
-      'dialogType'
+      'dialogType',
+      'isLocate'
     ])
 
   },

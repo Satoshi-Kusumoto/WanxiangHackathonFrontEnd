@@ -48,7 +48,7 @@
         class="noData"
         v-else
       >
-        没有停车数据
+        暂无停车数据
       </q-item>
     </q-card>
 

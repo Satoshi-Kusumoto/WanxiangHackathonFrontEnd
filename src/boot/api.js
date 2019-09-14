@@ -1,6 +1,7 @@
 const { ApiPromise, WsProvider } = require('@polkadot/api')
 
-const host = 'wss://kusama-rpc.polkadot.io/'
+const host = 'ws://127.0.0.1:9944'
+// const host = 'wss://kusama-rpc.polkadot.io/'
 // const host = 'wss://poc3-rpc.polkadot.io/'
 
 export default async ({ Vue }) => {
