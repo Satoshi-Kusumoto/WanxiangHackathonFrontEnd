@@ -93,15 +93,15 @@
           <div>
             <div class="text-weight-bold"> {{currentPark.name}}</div>
             <div class="text-grey"> {{currentPark.current_price | hour}}P / 小时</div>
-            <div class="text-grey">剩余车位 {{currentPark.remain }} </div>
+            <div class="text-grey">车位状况 {{currentPark.remain }} / {{currentPark.capacity}} </div>
           </div>
 
         </q-card-section>
         <q-card-section>
           <div>
-            <div class="text-grey3"> 最高价：{{currentPark.min_price || 0 | hour}}</div>
-            <div class="text-grey3"> 最低价：{{currentPark.max_price || 0 | hour}}</div>
-            <div class="text-grey3"> 当前价：{{currentPark.current_price || 0 | hour}}</div>
+            <div class="text-grey3"> 最高价：{{currentPark.min_price || 0 | hour}} P</div>
+            <div class="text-grey3"> 最低价：{{currentPark.max_price || 0 | hour}} P</div>
+            <div class="text-grey3"> 当前价：{{currentPark.current_price || 0 | hour}} P</div>
           </div>
         </q-card-section>
 
