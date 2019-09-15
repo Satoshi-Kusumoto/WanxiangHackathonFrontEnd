@@ -18,19 +18,19 @@ export const parseParkLot = (p, idx) => {
   data.remain = Number(rawData.remain.toString())
   data.capacity = Number(rawData.capacity.toString())
   let minPrice = rawData.min_price.toString()
-  minPrice = minPrice.split('')
-  minPrice.splice(-15, 0, '.')
-  data.min_price = Number(minPrice.join('')).toPrecision(2)
+  // minPrice = minPrice.split('')
+  // minPrice.splice(-15, 0, '.')
+  data.min_price = Number(minPrice).toPrecision(2)
 
   let maxPrice = rawData.max_price.toString()
-  maxPrice = maxPrice.split('')
-  maxPrice.splice(-15, 0, '.')
-  data.max_price = Number(maxPrice.join('')).toPrecision(2)
+  // maxPrice = maxPrice.split('')
+  // maxPrice.splice(-15, 0, '.')
+  data.max_price = Number(maxPrice).toPrecision(2)
 
   let currentPrice = rawData.current_price.toString()
-  currentPrice = currentPrice.split('')
-  currentPrice.splice(-15, 0, '.')
-  data.current_price = Number(currentPrice.join('')).toPrecision(2)
+  // currentPrice = currentPrice.split('')
+  // currentPrice.splice(-15, 0, '.')
+  data.current_price = Number(currentPrice).toPrecision(2)
 
   data.visible = false
 
