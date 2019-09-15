@@ -1,6 +1,6 @@
 // import _ from 'lodash'
 export const parseParkLot = (p, idx) => {
-  const parksName = ['停车场 A', '停车场 B', '停车场 C', '停车场 D']
+  // const parksName = ['停车场 A', '停车场 B', '停车场 C', '停车场 D']
   const data = {}
   const rawData = p.raw
   const lat = rawData.latitude.toString()
@@ -13,7 +13,7 @@ export const parseParkLot = (p, idx) => {
   longNum = longNum.join('')
   // console.log(latNum, longNum)
   data.id = p.id
-  data.name = parksName[idx] || '停车场信息'
+  // data.name = parksName[idx] || '停车场信息'
   data.position = [longNum, latNum]
   data.remain = Number(rawData.remain.toString())
   data.capacity = Number(rawData.capacity.toString())
@@ -45,7 +45,9 @@ export default {
     markArr: [],
     loaded: false,
     isLocate: false, // 导航状态
-    parkFee: 0
+    parkFee: 0, //
+    priceMap: {}, // 缓存的停车场历史数据
+    parkNames: {} // 缓存的停车场名称
   }),
   actions: {
     setConnect: ({ commit }, { payload }) => {
@@ -57,12 +59,13 @@ export default {
     getParks: async ({ commit, state }) => {
       const api = window.$api
       const parkingStorage = api.query.parking
-      // const parkIndex = [
-      //   '0xf21b4fff364db4a2d31adcf580cd7f23842076d41446f3b1130310063fdf7f2f',
-      //   '0x61197f65abfd736b69dfa093c74ae7b571a8359516413f74cdc64d6854b766be',
-      //   '0xaece0ac9f0b576ee1455f474ff446e30291bec53de5c175ec6f8d605531cff72',
-      //   '0x9951d5154eb6285f50f9dc61a384147d9c559ac594fcff91ae2e649df10e7a73'
-      // ]
+      const parkName = [
+        '停车场 A',
+        '停车场 B',
+        '停车场 C',
+        '停车场 D',
+        '个人停车场'
+      ]
       let parks = []
       let parkingLotCount = await parkingStorage.allParkingLotsCount()
       parkingLotCount = parkingLotCount.toNumber()
@@ -76,6 +79,15 @@ export default {
       const datas = []
       parks.forEach((p, idx) => {
         const data = parseParkLot(p, idx)
+        const id = data.id
+        const names = state.parkNames
+        if (names[id]) {
+          data.name = names[id]
+        } else {
+          data.name = parkName[idx]
+          names[id] = parkName[idx]
+          commit('setParkNames', { names: names })
+        }
         // console.log(data, 'data. .....')
         datas.push(data)
       })
@@ -169,6 +181,14 @@ export default {
     },
     setParkFee: (state, { fee }) => {
       state.parkFee = fee
+      return state
+    },
+    setPriceMap: (state, { map }) => {
+      state.priceMap = map
+      return state
+    },
+    setParkNames: (state, { names }) => {
+      state.parkNames = names
       return state
     }
   }

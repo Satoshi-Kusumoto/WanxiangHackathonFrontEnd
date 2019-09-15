@@ -28,7 +28,6 @@
           :events="park.events"
           :position="park.position"
           :label="{content: `${park.current_price * 3600}P / 时`, offset: [-20, 35]}"
-
         >
           <!-- <div class="panel">
            <span class="">{{park.price}}/时</span>
@@ -93,20 +92,21 @@
           <div>
             <div class="text-weight-bold"> {{currentPark.name}}</div>
             <div class="text-grey"> {{currentPark.current_price | hour}}P / 小时</div>
-            <div class="text-grey">车位状况 {{currentPark.remain }} / {{currentPark.capacity}} </div>
+            <div class="text-grey">总车位 {{currentPark.capacity}} </div>
+            <div class="text-grey">剩余 {{currentPark.remain }} </div>
           </div>
 
         </q-card-section>
         <q-card-section>
           <div>
-            <div class="text-grey3"> 最高价：{{currentPark.min_price || 0 | hour}} P</div>
-            <div class="text-grey3"> 最低价：{{currentPark.max_price || 0 | hour}} P</div>
+            <div class="text-grey3"> 最高价：{{currentPark.max_price || 0 | hour}} P</div>
+            <div class="text-grey3"> 最低价：{{currentPark.min_price || 0 | hour}} P</div>
             <div class="text-grey3"> 当前价：{{currentPark.current_price || 0 | hour}} P</div>
           </div>
         </q-card-section>
 
         <q-card-section>
-          价格变化
+          历史平均价格
           <v-chart
             :width={width}
             class="echarts"
@@ -216,7 +216,8 @@ export default {
       'setMarks',
       'setParks',
       'setLoaded',
-      'setIsLocate'
+      'setIsLocate',
+      'setPriceMap'
     ]),
 
     viewDetail () {
@@ -304,23 +305,23 @@ export default {
     },
     getChartsData (park) {
       // const time = moment().hour()
-      const { idx } = park
+      const { id } = park
       let xData = []
       let yData = []
       for (let i = 18; i >= 0; i--) {
         let label = 24 - i
         xData.push(label + '点')
-        // yData.push(_.random(min, max))
+        yData.push(_.random(park.min_price * 3600, park.max_price * 3600))
       }
-      // console.log(yData)
 
-      const priceMap = [
-        [31, 31, 33, 39, 39, 39, 33, 37, 33, 36, 34, 30, 34, 37, 36, 38, 33, 31, 33],
-        [30, 33, 36, 31, 32, 31, 35, 37, 36, 31, 32, 40, 30, 35, 40, 30, 36, 35, 37],
-        [39, 24, 37, 29, 24, 41, 48, 27, 25, 42, 37, 50, 37, 41, 27, 37, 44, 23, 49],
-        [41, 48, 46, 50, 45, 46, 37, 35, 43, 42, 42, 44, 36, 42, 50, 48, 45, 43, 40]]
+      const priceMap = this.priceMap
+      if (priceMap[id]) {
+        yData = priceMap[id]
+      } else {
+        priceMap[id] = yData
+        this.setPriceMap({ map: priceMap })
+      }
 
-      yData = priceMap[idx]
       return {
         xAxis: {
           type: 'category',
@@ -343,7 +344,8 @@ export default {
     ...mapState('parking', [
       'parks',
       'targetPark',
-      'loaded'
+      'loaded',
+      'priceMap'
     ]),
     ...mapState('user', [
       'address',

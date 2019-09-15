@@ -23,8 +23,11 @@
         </div>
       </q-item>
       <q-item v-if="parkInfo">
+
         <q-item-section>
-          <q-item-label>{{parkInfo.parkLotInfo.name}}</q-item-label>
+           <q-item-label>{{getParkName}}
+            <span class="text-grey">(总{{getCap}} 余{{getRemain}} )</span>
+          </q-item-label>
           <q-item-label caption>
             <span>入库时间 {{parkInfo.enter_time}}</span>
           </q-item-label>
@@ -33,7 +36,8 @@
           </q-item-label>
         </q-item-section>
         <q-item-section side>
-          费用 ≈ {{parkInfo.calcFee}} P
+          <q-item-label caption>当前价格{{getPrice}} P</q-item-label>
+          <q-item-label class="text-black">费用 ≈ {{parkInfo.calcFee}} P </q-item-label>
         </q-item-section>
         <q-item-section side>
           <q-btn
@@ -130,7 +134,40 @@ export default {
       'parkInfo',
       'balance',
       'account'
-    ])
+    ]),
+    ...mapState('parking', [
+      'parkNames'
+    ]),
+    getParkName () {
+      const park = this.parkInfo
+      if (park && park.parkLotInfo) {
+        const id = park.parkLotInfo.id
+        const names = this.parkNames
+        if (names[id]) return names[id]
+      }
+      return ''
+    },
+    getRemain () {
+      const park = this.parkInfo
+      if (park && park.parkLotInfo) {
+        return park.parkLotInfo.remain
+      }
+      return ''
+    },
+    getCap () {
+      const park = this.parkInfo
+      if (park && park.parkLotInfo) {
+        return park.parkLotInfo.capacity
+      }
+      return ''
+    },
+    getPrice () {
+      const park = this.parkInfo
+      if (park && park.parkLotInfo) {
+        return park.parkLotInfo.current_price * 3600
+      }
+      return ''
+    }
   },
   filters: {
     split (val) {

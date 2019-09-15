@@ -45,6 +45,7 @@ export default {
       let parkId = rawData.parking_lot_hash.toString()
       let park = await parkingStorage.parkingLots(parkId)
       let parsedPark = parseParkLot(park)
+
       parkInfo.parkLotInfo = parsedPark
       parkInfo.parkLotInfo.id = parkId
       parkInfo.dur_time = moment(
