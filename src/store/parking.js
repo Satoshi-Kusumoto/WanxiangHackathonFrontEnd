@@ -1,4 +1,5 @@
-// import _ from 'lodash'
+import Decimal from 'decimal.js'
+
 export const parseParkLot = (p, idx) => {
   // const parksName = ['停车场 A', '停车场 B', '停车场 C', '停车场 D']
   const data = {}
@@ -27,11 +28,11 @@ export const parseParkLot = (p, idx) => {
   // maxPrice.splice(-15, 0, '.')
   data.max_price = Number(maxPrice).toPrecision(2)
 
-  let currentPrice = rawData.current_price.toString()
+  // let currentPrice = rawData.current_price.toString()
   // currentPrice = currentPrice.split('')
   // currentPrice.splice(-15, 0, '.')
-  data.current_price = Number(currentPrice).toPrecision(2)
-
+  let currentPrice = new Decimal(maxPrice).minus(minPrice).times(new Decimal(data.capacity).minus(data.remain)).div(data.capacity).add(minPrice).toFixed(2)
+  data.current_price = currentPrice
   data.visible = false
 
   return data

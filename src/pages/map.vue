@@ -27,7 +27,7 @@
           :vid="idx+'marker'"
           :events="park.events"
           :position="park.position"
-          :label="{content: `${park.current_price * 3.6}P / 时`, offset: [-20, 35]}"
+          :label="{content: `${(park.current_price * 3.6).toFixed(2)}P / 时`, offset: [-20, 35]}"
         >
           <!-- <div class="panel">
            <span class="">{{park.price}}/时</span>
