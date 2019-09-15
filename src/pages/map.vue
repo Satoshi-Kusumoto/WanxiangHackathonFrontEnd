@@ -434,13 +434,6 @@ export default {
     // }
   },
   filters: {
-    balance (val) {
-      let arr = val.split('')
-      arr.splice(-15, 0, '.')
-      let num = arr.join('')
-      num = Number(num).toFixed(2)
-      return num
-    },
     hour (val) {
       if (val) {
         return new Decimal(val).times(3.6).toString()

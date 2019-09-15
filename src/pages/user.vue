@@ -174,13 +174,6 @@ export default {
       const head = val.substr(0, 5)
       const tail = val.substr(-5)
       return `${head}...${tail}`
-    },
-    balance (val) {
-      let arr = val.split('')
-      arr.splice(-6, 0, '.')
-      let num = arr.join('')
-      num = Number(num).toFixed(2)
-      return num
     }
   }
 }
