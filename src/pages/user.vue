@@ -164,7 +164,7 @@ export default {
     getPrice () {
       const park = this.parkInfo
       if (park && park.parkLotInfo) {
-        return park.parkLotInfo.current_price * 3.6
+        return (park.parkLotInfo.current_price * 3.6).toFixed(2)
       }
       return ''
     }
