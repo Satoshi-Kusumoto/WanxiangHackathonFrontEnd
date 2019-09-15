@@ -165,7 +165,7 @@
           停车场id: {{showData.parking_lot_hash | split}}
         </q-card-section>
         <q-card-section v-if="parkFee">
-          费用: {{parkFee}} P
+          费用: {{getParkFee}} P
         </q-card-section>
 
         <q-card-actions align="right">
@@ -285,13 +285,20 @@ export default {
     ]),
     ...mapState('parking', [
       'parkFee'
-    ])
+    ]),
+    getParkFee () {
+      const fee = this.parkFee
+      if (fee) {
+        return new Decimal(fee).div(1000).toFixed(2)
+      }
+      return ''
+    }
 
   },
   filters: {
     hour (val) {
       if (val) {
-        return new Decimal(val).times(3600).toString()
+        return new Decimal(val).times(3.6).toString()
       }
     },
     split (val) {

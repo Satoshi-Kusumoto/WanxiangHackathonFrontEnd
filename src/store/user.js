@@ -16,9 +16,10 @@ export default {
   }),
   actions: {
     getBalance: async ({ commit, state }) => {
-      const balance = await window.$api.query.balances.freeBalance(
+      let balance = await window.$api.query.balances.freeBalance(
         state.address
       )
+      balance = new Decimal(balance.toString()).div(1000).toFixed(2)
       commit('setBalance', {
         balance
       })
@@ -64,6 +65,7 @@ export default {
       parkInfo.calcFee = new Decimal(durSecond)
         .times(currentPrice)
         .add(currentFee)
+        .div(1000)
         .toFixed(2)
 
       commit('setParkInfo', {

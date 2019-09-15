@@ -27,7 +27,7 @@
           :vid="idx+'marker'"
           :events="park.events"
           :position="park.position"
-          :label="{content: `${park.current_price * 3600}P / 时`, offset: [-20, 35]}"
+          :label="{content: `${park.current_price * 3.6}P / 时`, offset: [-20, 35]}"
         >
           <!-- <div class="panel">
            <span class="">{{park.price}}/时</span>
@@ -311,7 +311,7 @@ export default {
       for (let i = 18; i >= 0; i--) {
         let label = 24 - i
         xData.push(label + '点')
-        yData.push(_.random(park.min_price * 3600, park.max_price * 3600))
+        yData.push(_.random(park.min_price * 3.6, park.max_price * 3.6))
       }
 
       const priceMap = this.priceMap
@@ -443,7 +443,7 @@ export default {
     },
     hour (val) {
       if (val) {
-        return new Decimal(val).times(3600).toString()
+        return new Decimal(val).times(3.6).toString()
       }
     }
   }
