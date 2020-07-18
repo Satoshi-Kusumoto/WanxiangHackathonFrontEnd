@@ -23,7 +23,7 @@
     "decimal.js": "^10.2.0",
     "echarts": "^4.2.1",
     "echarts-gl": "^1.1.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "quasar": "^1.1.0",
     "vue-amap": "^0.5.10",
